@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: app
@@ -14,16 +14,23 @@ spec:
     spec:
       containers:
         - name: app
-          image: jarek1725/systemy-gridowe-application:latest
+          image: jarek1725/sgp
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
             - name: SPRING_DATASOURCE_URL
               value: jdbc:postgresql://db-service:5432/projektSystemyGridowe
             - name: SPRING_DATASOURCE_USERNAME
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_USER
             - name: SPRING_DATASOURCE_PASSWORD
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
             - name: SERVER_PORT
               value: "8080"
             - name: SERVER_ADDRESS

@@ -30,6 +30,15 @@ public class Task {
     @Column(name = "create_date", updatable = false)
     private LocalDateTime createDate;
 
+    public Task(Long id, String title, String description, TaskStatus status, Integer priority, LocalDateTime due) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.due = due;
+    }
+
     @PrePersist
     protected void onCreate() {
         createDate = LocalDateTime.now();
